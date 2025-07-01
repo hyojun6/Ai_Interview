@@ -1,0 +1,30 @@
+version: '3.8'
+
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: interview
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: interview
+      MYSQL_USER: fa_user
+      MYSQL_PASSWORD: fa_pass
+    ports:
+      - "3309:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+
+  backend:
+    build:
+      context: ./backend
+    container_name: fa_backend
+    ports:
+      - "8000:8000"
+    depends_on:
+      - mysql
+    volumes:
+      - ./backend/app:/app/app
+
+volumes:
+  mysql_data:
